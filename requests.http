@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3000
+
+GET {{baseUrl}}/health
+
+### Auth login com matricula admin
+# @name createUser
+POST {{baseUrl}}/user
+Content-Type: application/json
+
+{
+  "email": "romiro@gmail.com",
+  "name": "Romiro",
+  "pwd": "danger123456"
+}
