@@ -2,9 +2,20 @@
 
 GET {{baseUrl}}/health
 
-### Auth login com matricula admin
+### Create user
 # @name createUser
 POST {{baseUrl}}/user
+Content-Type: application/json
+
+{
+  "email": "romiro@gmail.com",
+  "name": "Romiro",
+  "pwd": "danger123456"
+}
+
+### Auth login com matricula admin
+# @name authUser
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
