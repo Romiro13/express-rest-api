@@ -18,11 +18,8 @@ export async function gerarToken(payload: JWTPayload) {
 }
 
 export async function validarToken(token: string) {
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload;
-  } catch (err) {
-    console.error("Token inválido ou expirado:", err);
-    return null;
-  }
+  const { payload }: { payload: { sub: string; name: string } } =
+    await jwtVerify(token, secret);
+
+  return { id: payload.sub, name: payload.name };
 }

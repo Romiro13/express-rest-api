@@ -1,6 +1,13 @@
 @baseUrl = http://localhost:3000
 
+@token = {{authUser.response.body.token}}
+
 GET {{baseUrl}}/health
+
+### Get users
+# @name getUser
+GET {{baseUrl}}/user
+Authorization: Bearer {{token}}
 
 ### Create user
 # @name createUser

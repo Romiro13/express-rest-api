@@ -1,5 +1,5 @@
 import express from "express";
-import { routers } from "./routers/routers.ts";
+import { routers } from "./routers/index.ts";
 
 const app = express();
 

@@ -11,6 +11,10 @@ export async function findOne(user: User) {
   return await prisma.user.findUnique({ where: { email: user.email } });
 }
 
+export async function findMany() {
+  return await prisma.user.findMany({ take: 1000 });
+}
+
 export async function validatePwd(plainPwd: string, hashedPwd: string) {
   return await bcrypt.compare(plainPwd, hashedPwd);
 }

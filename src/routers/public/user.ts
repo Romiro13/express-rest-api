@@ -1,5 +1,5 @@
 import { userSchema } from "@/models/user.ts";
-import { createUser } from "@/services/user.ts";
+import { createUser, findMany } from "@/services/user.ts";
 import { Router } from "express";
 import z from "zod";
 
