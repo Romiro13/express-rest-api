@@ -7,7 +7,12 @@
   "scripts": {
     "start": "node src/server.ts",
     "dev": "nodemon",
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:watch": "docker compose up -w backend --build",
+    "docker:logs": "docker compose logs -f backend",
+    "docker:restart": "docker compose restart backend"
   },
   "keywords": [],
   "author": "",

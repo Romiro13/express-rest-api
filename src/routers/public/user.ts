@@ -20,6 +20,7 @@ userRouter.post("/", async (req, res) => {
     const _user = await createUser(user.data);
     return res.status(201).json(_user);
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       code: 400,
       message: "Erro ao tentar salvar no banco de dados.",
