@@ -17,6 +17,7 @@ Express.js REST API with TypeScript, Prisma ORM, MongoDB, JWT authentication, an
 
 ### Docker Commands
 - `pnpm docker:up` - Start all services (MongoDB replica set + backend) in detached mode
+- `pnpm docker:up:db` - Start only MongoDB and replica set initialization
 - `pnpm docker:down` - Stop and remove all containers
 - `pnpm docker:watch` - Start with file watching (syncs `./src` changes without rebuild)
 - `pnpm docker:logs` - Follow backend container logs
@@ -40,7 +41,7 @@ src/
 ├── database/           # Prisma client singleton export
 ├── lib/                # Shared utilities (JWT functions using jose library)
 ├── middleware/         # Express middleware (authMiddleware validates JWT)
-├── models/             # Data model types (User interface with pwd_hash)
+├── models/             # Zod schemas and type definitions (User types with pwd field)
 ├── services/           # Business logic (user CRUD, password hashing, login flow)
 └── routers/
     ├── index.ts        # Main router composition with /health endpoint
@@ -68,8 +69,10 @@ src/
 - **Binary targets**: `native` + `debian-openssl-1.1.x` (for Docker/Debian compatibility)
 - **Connection**: `DATABASE_URL_MONGO` environment variable
 - **Singleton**: `prisma` client exported from `src/database/index.ts`
-- **Validation**: Zod library for request/response schema validation
+- **Validation**: Zod v4 with async transforms for automatic password hashing in model schemas
+- **Password Hashing**: Automatic via Zod transform in `userForCreateSchema` and `userForUpdateSchema`
 - **Local Development**: Docker Compose provides MongoDB 8 in replica set mode (required for Prisma transactions)
+- **Database Schema**: User model has `id`, `email` (unique), `name`, and `pwd` fields
 
 ### TypeScript Configuration
 - **Strict mode** enabled with additional strictness flags
@@ -99,7 +102,14 @@ Required variables (see `.env.example`):
 - Token validation extracts user data but **doesn't attach it to `req` object** (authMiddleware validates but doesn't populate req.user)
 
 ### Service Layer Responsibilities
-- User CRUD operations (`createUser`, `findOne`, `findMany`)
-- Password hashing (`hashPwd`) and validation (`validatePwd`)
+- User CRUD operations (`createUser`, `updateUser`, `deleteUser`, `findOneByEmail`, `findOneById`, `findMany`)
+- Password hashing (`hashPwd` with bcrypt salt rounds of 10) and validation (`validatePwd`)
 - Login flow: validates credentials → generates JWT token
 - All database interactions go through Prisma client singleton
+
+### Data Flow & Validation Pattern
+1. Request received → Zod schema validation in models layer
+2. Zod async transform automatically hashes passwords before database operations
+3. Service layer receives pre-hashed passwords from Zod transforms
+4. Service layer performs business logic and database operations via Prisma
+5. Response returned with appropriate status codes

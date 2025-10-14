@@ -2,12 +2,10 @@
 
 @token = {{authUser.response.body.token}}
 
+@userId = 68eebaa0b7722a04553ce14f
+
 GET {{baseUrl}}/health
 
-### Get users
-# @name getUser
-GET {{baseUrl}}/user
-Authorization: Bearer {{token}}
 
 ### Create user
 # @name createUser
@@ -30,3 +28,28 @@ Content-Type: application/json
   "name": "Romiro",
   "pwd": "danger123456"
 }
+
+### Private routers
+
+### Get users
+# @name getUsers
+GET {{baseUrl}}/user
+Authorization: Bearer {{token}}
+
+### Update user
+# @name updateUser
+PUT {{baseUrl}}/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": "{{userId}}",
+  "name": "New Name"
+}
+
+
+### Delete user
+# @name deleteUser
+DELETE {{baseUrl}}/user/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json

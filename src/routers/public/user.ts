@@ -1,24 +1,25 @@
-import { userSchema } from "@/models/user.ts";
-import { createUser, findMany } from "@/services/user.ts";
+import { getZodErrorMessages } from "@/lib/zod-erros.ts";
+import { userForCreateSchema, userSchemaBase } from "@/models/user.ts";
+import { createUser } from "@/services/user.ts";
 import { Router } from "express";
-import z from "zod";
 
-export const userRouter: Router = Router();
+export const publicUserRouter: Router = Router();
 
-userRouter.post("/", async (req, res) => {
-  const user = await userSchema.safeParseAsync(req.body);
+publicUserRouter.post("/", async (req, res) => {
+  const userData = await userSchemaBase.safeParseAsync(req.body);
 
-  if (!user.success) {
+  if (!userData.success) {
     return res.status(400).json({
       code: 400,
       message: "Erro de input do body",
-      errors: z.flattenError(user.error),
+      errors: getZodErrorMessages(userData.error),
     });
   }
 
   try {
-    const _user = await createUser(user.data);
-    return res.status(201).json(_user);
+    const data = await userForCreateSchema.parseAsync(userData.data);
+    const user = await createUser(data);
+    return res.status(201).json(user);
   } catch (error) {
     console.log(error);
     return res.status(400).json({
