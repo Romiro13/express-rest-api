@@ -18,11 +18,12 @@ Modern REST API built with Express.js, TypeScript, Prisma ORM, MongoDB, JWT auth
 - **Zod Validation** - Schema validation with async transforms for automatic password hashing
 - **Docker Support** - Containerized development environment with hot-reload
 - **Path Aliases** - Clean imports with `@/*` and `@orm/*` aliases
+- **Code Quality** - ESLint and Prettier with auto-formatting and import organization
 
 ## 📋 Prerequisites
 
 - **Node.js** 20+ (recommended: Node 24)
-- **pnpm** 10.15.1 or higher
+- **pnpm** 10.18.3 or higher
 - **Docker** & **Docker Compose** (for local MongoDB)
 - **MongoDB** 8.0+ (via Docker or external instance)
 
@@ -103,11 +104,13 @@ pnpm start
 
 ### Core Commands
 
-| Command      | Description                                             |
-| ------------ | ------------------------------------------------------- |
-| `pnpm dev`   | Start development server with hot-reload without docker |
-| `pnpm build` | Compile TypeScript to JavaScript (`./dist`)             |
-| `pnpm start` | Run production server from compiled code                |
+| Command        | Description                                             |
+| -------------- | ------------------------------------------------------- |
+| `pnpm dev`     | Start development server with hot-reload without docker |
+| `pnpm build`   | Compile TypeScript to JavaScript (`./dist`)             |
+| `pnpm start`   | Run production server from compiled code                |
+| `pnpm format`  | Format code with Prettier and organize imports          |
+| `pnpm lint`    | Lint code with ESLint and auto-fix issues               |
 
 ### Docker Commands
 
@@ -204,10 +207,17 @@ model User {
 
 ### TypeScript Configuration
 
-- **Strict mode** enabled with additional strictness flags
+- **Strict mode** enabled with additional strictness flags (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noUnusedLocals`, `noUnusedParameters`)
 - **ES Modules** - `"type": "module"` with `nodenext` resolution
 - **Path aliases** - `@/*` → `./src/*`, `@orm/*` → `./prisma/generated/*`
-- **Isolated modules** - `verbatimModuleSyntax` enabled
+- **Isolated modules** - `verbatimModuleSyntax`, `isolatedModules`, and `erasableSyntaxOnly` enabled
+- **JSX Configuration** - `react-jsx` mode enabled
+
+### Code Quality Tools
+
+- **ESLint** - TypeScript ESLint with recommended rules and Prettier integration (flat config format)
+- **Prettier** - Auto-formatting with organize imports plugin, single quotes, 100-character line width
+- **Formatting** - Automatic import organization and code styling enforcement
 
 ### Prisma Configuration
 
@@ -268,6 +278,16 @@ pnpm exec prisma generate
 pnpm exec prisma db push
 ```
 
+### 4. Code Quality
+
+```bash
+# Format code with Prettier
+pnpm format
+
+# Lint code with ESLint
+pnpm lint
+```
+
 ## 📝 Environment Variables
 
 | Variable             | Description                | Required |
@@ -302,6 +322,8 @@ node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"
 | **bcrypt**     | 6.0     | Password hashing        |
 | **Zod**        | 4.1     | Schema validation       |
 | **tsx**        | 4.20    | TypeScript execution    |
+| **ESLint**     | 9.37    | Code linting            |
+| **Prettier**   | 3.6     | Code formatting         |
 
 ## 🤝 Contributing
 

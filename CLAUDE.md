@@ -8,12 +8,14 @@ Express.js REST API with TypeScript, Prisma ORM, MongoDB, JWT authentication, an
 
 ## Development Commands
 
-**Package Manager**: This project uses `pnpm` (v10.15.1)
+**Package Manager**: This project uses `pnpm` (v10.18.3)
 
 ### Core Commands
 - `pnpm dev` - Start development server with hot reload (uses tsx watch via nodemon)
 - `pnpm build` - Compile TypeScript to JavaScript (outputs to `./dist`)
 - `pnpm start` - Run compiled production server
+- `pnpm format` - Format code with Prettier and organize imports
+- `pnpm lint` - Lint code with ESLint and auto-fix issues
 
 ### Docker Commands
 - `pnpm docker:up` - Start all services (MongoDB replica set + backend) in detached mode
@@ -75,10 +77,16 @@ src/
 - **Database Schema**: User model has `id`, `email` (unique), `name`, and `pwd` fields
 
 ### TypeScript Configuration
-- **Strict mode** enabled with additional strictness flags
+- **Strict mode** enabled with additional strictness flags (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noUnusedLocals`, `noUnusedParameters`)
 - **ES Modules**: Uses `"type": "module"` with `nodenext` module resolution
-- **Isolated modules**: `verbatimModuleSyntax` and `isolatedModules` enabled
+- **Isolated modules**: `verbatimModuleSyntax`, `isolatedModules`, and `erasableSyntaxOnly` enabled
 - **No emit**: TypeScript used for type checking only during dev (tsx handles execution)
+- **JSX Configuration**: `react-jsx` mode enabled
+
+### Code Quality Tools
+- **ESLint**: TypeScript ESLint with recommended rules and Prettier integration
+- **Prettier**: Auto-formatting with organize imports plugin, single quotes, 100-character line width
+- **Configuration**: Flat config format (ESLint 9+) with TypeScript support
 
 ## Environment Variables
 
@@ -93,6 +101,7 @@ Required variables (see `.env.example`):
 - **Docker**: Includes hot-reload via `docker compose watch` (syncs `./src` changes)
 - **MongoDB Setup**: Docker creates replica set automatically via `init-replica` service
 - **TypeScript**: Compilation outputs to `./dist` but development uses tsx directly via nodemon
+- **Code Quality**: Run `pnpm format` before commits, `pnpm lint` to check for issues
 
 ### Security & Authentication
 - JWT tokens use `jose` library (not `jsonwebtoken`)
