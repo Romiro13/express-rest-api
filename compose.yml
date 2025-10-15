@@ -9,7 +9,6 @@ services:
       - "3000:3000"
     env_file:
       - .env
-      - .env.local
     extra_hosts:
       - "localhost:host-gateway"
     depends_on:
