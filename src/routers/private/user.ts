@@ -1,23 +1,18 @@
-import { getZodErrorMessages } from "@/lib/zod-erros.ts";
-import { userForUpdateSchema } from "@/models/user.ts";
-import {
-  deleteUser,
-  findMany,
-  findOneById,
-  updateUser,
-} from "@/services/user.ts";
-import { Router } from "express";
+import { getZodErrorMessages } from '@/lib/zod-erros.ts';
+import { userForUpdateSchema } from '@/models/user.ts';
+import { deleteUser, findMany, findOneById, updateUser } from '@/services/user.ts';
+import { Router } from 'express';
 
 export const privateUserRouter: Router = Router();
 
-privateUserRouter.get("/:id", async (req, res) => {
+privateUserRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
     return res.status(400).json({
       code: 400,
-      message: "Bad Request",
-      errors: ["id é obrigatório."],
+      message: 'Bad Request',
+      errors: ['id é obrigatório.'],
     });
   }
 
@@ -28,23 +23,23 @@ privateUserRouter.get("/:id", async (req, res) => {
     console.log(error);
     return res.status(400).json({
       code: 400,
-      message: "Erro ao tentar buscar no banco de dados.",
+      message: 'Erro ao tentar buscar no banco de dados.',
       errors: [error],
     });
   }
 });
 
-privateUserRouter.get("/", async (_req, res) => {
+privateUserRouter.get('/', async (_req, res) => {
   return res.status(200).json(await findMany());
 });
 
-privateUserRouter.put("/", async (req, res) => {
+privateUserRouter.put('/', async (req, res) => {
   const parsed = await userForUpdateSchema.safeParseAsync(req.body);
 
   if (!parsed.success) {
     return res.status(400).json({
       code: 400,
-      message: "Erro de input do body",
+      message: 'Erro de input do body',
       errors: getZodErrorMessages(parsed.error),
     });
   }
@@ -56,20 +51,20 @@ privateUserRouter.put("/", async (req, res) => {
     console.log(error);
     return res.status(400).json({
       code: 400,
-      message: "Erro ao tentar atualizar no banco de dados.",
+      message: 'Erro ao tentar atualizar no banco de dados.',
       errors: [error],
     });
   }
 });
 
-privateUserRouter.delete("/:id", async (req, res) => {
+privateUserRouter.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
     return res.status(400).json({
       code: 400,
-      message: "Bad Request",
-      errors: ["id é obrigatório."],
+      message: 'Bad Request',
+      errors: ['id é obrigatório.'],
     });
   }
 
@@ -80,7 +75,7 @@ privateUserRouter.delete("/:id", async (req, res) => {
     console.log(error);
     return res.status(400).json({
       code: 400,
-      message: "Erro ao tentar deletar no banco de dados.",
+      message: 'Erro ao tentar deletar no banco de dados.',
       errors: [error],
     });
   }
