@@ -39,18 +39,18 @@ privateUserRouter.get("/", async (_req, res) => {
 });
 
 privateUserRouter.put("/", async (req, res) => {
-  const userData = await userForUpdateSchema.safeParseAsync(req.body);
+  const parsed = await userForUpdateSchema.safeParseAsync(req.body);
 
-  if (!userData.success) {
+  if (!parsed.success) {
     return res.status(400).json({
       code: 400,
       message: "Erro de input do body",
-      errors: getZodErrorMessages(userData.error),
+      errors: getZodErrorMessages(parsed.error),
     });
   }
 
   try {
-    const user = await updateUser(userData.data);
+    const user = await updateUser(parsed.data);
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);

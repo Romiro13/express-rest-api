@@ -6,19 +6,19 @@ import { Router } from "express";
 export const publicUserRouter: Router = Router();
 
 publicUserRouter.post("/", async (req, res) => {
-  const userData = await userSchemaBase.safeParseAsync(req.body);
+  const parsed = await userSchemaBase.safeParseAsync(req.body);
 
-  if (!userData.success) {
+  if (!parsed.success) {
     return res.status(400).json({
       code: 400,
       message: "Erro de input do body",
-      errors: getZodErrorMessages(userData.error),
+      errors: getZodErrorMessages(parsed.error),
     });
   }
 
   try {
-    const data = await userForCreateSchema.parseAsync(userData.data);
-    const user = await createUser(data);
+    const userForCreate = await userForCreateSchema.parseAsync(parsed.data);
+    const user = await createUser(userForCreate);
     return res.status(201).json(user);
   } catch (error) {
     console.log(error);

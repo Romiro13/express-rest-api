@@ -6,17 +6,17 @@ import { Router } from "express";
 export const authRouter: Router = Router();
 
 authRouter.post("/login", async (req, res) => {
-  const user = await userSchemaBase.safeParseAsync(req.body);
+  const parsed = await userSchemaBase.safeParseAsync(req.body);
 
-  if (!user.success) {
+  if (!parsed.success) {
     return res.status(400).json({
       code: 400,
       message: "Bad Request",
-      errors: getZodErrorMessages(user.error),
+      errors: getZodErrorMessages(parsed.error),
     });
   }
 
-  const token = await login(user.data);
+  const token = await login(parsed.data);
 
   if (!token) {
     res.status(401).json({
