@@ -9,19 +9,25 @@ export async function authMiddleware(
   const { authorization } = req.headers;
 
   if (!authorization && !authorization?.startsWith("Bearer "))
-    return res
-      .status(404)
-      .json({ code: 404, message: "Não autorizado.", errors: [] });
+    return res.status(404).json({
+      code: 404,
+      message: "Não autorizado.",
+      errors: [
+        `Header authorization não foi definido ou não começa com 'Bearer '.`,
+      ],
+    });
 
   const token = authorization.split(" ")[1];
 
   if (!token)
-    return res
-      .status(404)
-      .json({ code: 404, message: "Não autorizado.", errors: [] });
+    return res.status(404).json({
+      code: 404,
+      message: "Não autorizado.",
+      errors: ["Authorization sem token"],
+    });
 
   try {
-    const user = await validarToken(token);
+    await validarToken(token);
   } catch (err) {
     return res
       .status(404)

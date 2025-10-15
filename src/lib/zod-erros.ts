@@ -1,5 +1,8 @@
-import { ZodError } from "zod";
+import z, { ZodError } from "zod";
 
 export function getZodErrorMessages(error: ZodError): string[] {
-  return error.issues.map((issue) => issue.message);
+  return z
+    .prettifyError(error)
+    .split("✖ ")
+    .filter((v) => v !== "");
 }
